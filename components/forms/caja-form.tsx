@@ -1,0 +1,8 @@
+"use client";
+import { useState } from "react";
+import { createClient } from "@/lib/supabase/client";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { formatCurrency } from "@/lib/utils";
+export function CajaForm() { const [reportado,setReportado]=useState(0); const [esperado,setEsperado]=useState<number|null>(null); const [error,setError]=useState<string|null>(null); async function calcular(){ setError(null); const supabase=createClient(); const today=new Date().toISOString().slice(0,10); const { data, error }=await supabase.from("unidades_inventario").select("producto:productos(precio), movimientos!inner(tipo,fecha)").eq("estado","vendida").eq("movimientos.tipo","venta").gte("movimientos.fecha",today); if(error){ setError(error.message); return; } setEsperado((data??[]).reduce((a:any,u:any)=>a+Number(u.producto?.precio??0),0)); } return <Card><CardHeader><CardTitle>Conciliación diaria</CardTitle></CardHeader><CardContent className="space-y-4"><Input type="number" placeholder="Dinero contado en caja" onChange={(e)=>setReportado(Number(e.target.value))}/><Button onClick={calcular}>Calcular diferencia</Button>{error&&<p className="rounded-xl bg-red-50 p-3 text-sm text-red-700">{error}</p>}{esperado!==null&&<div className="rounded-2xl border p-4"><p>Ventas registradas: <b>{formatCurrency(esperado)}</b></p><p>Dinero reportado: <b>{formatCurrency(reportado)}</b></p><p>Diferencia: <b className={reportado-esperado<0?"text-red-600":"text-emerald-700"}>{formatCurrency(reportado-esperado)}</b></p></div>}</CardContent></Card>; }
