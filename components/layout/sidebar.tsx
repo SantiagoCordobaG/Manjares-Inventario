@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { SignOutButton } from "@/components/auth/sign-out-button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { navItems } from "@/components/layout/nav-config";
@@ -31,6 +32,9 @@ export function Sidebar({ profile }: { profile: Usuario }) {
           </Link>
         ))}
       </nav>
+      <div className="mt-6 border-t pt-4">
+        <SignOutButton />
+      </div>
     </aside>
   );
 }
