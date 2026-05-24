@@ -38,6 +38,7 @@
 - Se mejoró el feedback de formularios y acciones para mostrar errores reales de Supabase/RLS.
 - Se conectó la gráfica de ventas del dashboard a datos reales de movimientos, en lugar de datos estáticos.
 - Se rediseñó la pantalla de login con accesos de demo visibles, mejor jerarquía visual y redirección más robusta tras autenticarse.
+- Se corrigió la visualización de QR en detalle de inventario usando una imagen PNG directa para evitar fallos del optimizador de imágenes con SVG dinámico.
 
 ### Archivos creados/modificados
 - `package.json`

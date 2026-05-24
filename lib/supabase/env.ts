@@ -6,6 +6,35 @@ function requireEnv(name: string, value: string | undefined) {
   return value;
 }
 
+function getSupabasePublishableKeyValue() {
+  return process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+}
+
+export function getSupabaseBrowserEnv() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const publishableKey = getSupabasePublishableKeyValue();
+
+  if (!url || !publishableKey) {
+    return null;
+  }
+
+  return { url, publishableKey };
+}
+
+export function getMissingSupabaseBrowserEnv() {
+  const missing: string[] = [];
+
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
+    missing.push("NEXT_PUBLIC_SUPABASE_URL");
+  }
+
+  if (!getSupabasePublishableKeyValue()) {
+    missing.push("NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY o NEXT_PUBLIC_SUPABASE_ANON_KEY");
+  }
+
+  return missing;
+}
+
 export function getSupabaseUrl() {
   return requireEnv("NEXT_PUBLIC_SUPABASE_URL", process.env.NEXT_PUBLIC_SUPABASE_URL);
 }
@@ -13,7 +42,7 @@ export function getSupabaseUrl() {
 export function getSupabasePublishableKey() {
   return requireEnv(
     "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY or NEXT_PUBLIC_SUPABASE_ANON_KEY",
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    getSupabasePublishableKeyValue()
   );
 }
 

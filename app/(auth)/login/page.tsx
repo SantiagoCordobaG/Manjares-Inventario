@@ -2,8 +2,21 @@ import { LoginForm } from "@/components/forms/login-form";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { CakeSlice, QrCode, ShieldCheck, Store } from "lucide-react";
+import { getMissingSupabaseBrowserEnv } from "@/lib/supabase/env";
 
-export default function LoginPage() {
+type LoginPageProps = {
+  searchParams?: {
+    config?: string;
+  };
+};
+
+export default function LoginPage({ searchParams }: LoginPageProps) {
+  const missingEnv = getMissingSupabaseBrowserEnv();
+  const hasSupabaseConfigError = searchParams?.config === "supabase" || missingEnv.length > 0;
+  const configMessage = missingEnv.length > 0
+    ? `Faltan variables en Vercel: ${missingEnv.join(", ")}. Agrégalas y vuelve a desplegar la app.`
+    : "Vercel no pudo inicializar Supabase en el middleware. Revisa las variables públicas del proyecto y luego vuelve a desplegar.";
+
   return (
     <main className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top_left,rgba(17,24,39,0.08),transparent_34%),linear-gradient(180deg,#f8fafc_0%,#eef2ff_100%)] p-4">
       <div className="absolute left-[-8rem] top-[-8rem] h-72 w-72 rounded-full bg-slate-900/10 blur-3xl" />
@@ -61,7 +74,7 @@ export default function LoginPage() {
                 <h2 className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">Ingresa a tu cuenta</h2>
                 <p className="mt-2 text-sm leading-6 text-muted-foreground">Usa los accesos de demo para revisar la experiencia completa y probar el flujo de tu sede.</p>
               </div>
-              <LoginForm />
+              <LoginForm disabled={hasSupabaseConfigError} disabledMessage={hasSupabaseConfigError ? configMessage : undefined} />
             </div>
           </section>
         </div>

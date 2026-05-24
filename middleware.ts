@@ -1,12 +1,37 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
-import { getSupabasePublishableKey, getSupabaseUrl } from "@/lib/supabase/env";
+import { getSupabaseBrowserEnv } from "@/lib/supabase/env";
+
+const protectedPrefixes = [
+  "/dashboard",
+  "/productos",
+  "/inventario",
+  "/escanear",
+  "/reportes",
+  "/caja",
+  "/traslados",
+  "/usuarios"
+];
 
 export async function middleware(request: NextRequest) {
+  const protectedPath = protectedPrefixes.some((prefix) => request.nextUrl.pathname.startsWith(prefix));
+  const isLoginPath = request.nextUrl.pathname === "/login";
+  const supabaseEnv = getSupabaseBrowserEnv();
+
+  if (!supabaseEnv) {
+    if (protectedPath) {
+      const loginUrl = new URL("/login", request.url);
+      loginUrl.searchParams.set("config", "supabase");
+      return NextResponse.redirect(loginUrl);
+    }
+
+    return NextResponse.next();
+  }
+
   let response = NextResponse.next({ request: { headers: request.headers } });
   const supabase = createServerClient(
-    getSupabaseUrl(),
-    getSupabasePublishableKey(),
+    supabaseEnv.url,
+    supabaseEnv.publishableKey,
     {
       cookies: {
         get(name: string) { return request.cookies.get(name)?.value; },
@@ -24,9 +49,8 @@ export async function middleware(request: NextRequest) {
     }
   );
   const { data: { user } } = await supabase.auth.getUser();
-  const protectedPath = request.nextUrl.pathname.startsWith("/dashboard") || request.nextUrl.pathname.startsWith("/productos") || request.nextUrl.pathname.startsWith("/inventario") || request.nextUrl.pathname.startsWith("/escanear") || request.nextUrl.pathname.startsWith("/reportes") || request.nextUrl.pathname.startsWith("/caja");
   if (!user && protectedPath) return NextResponse.redirect(new URL("/login", request.url));
-  if (user && request.nextUrl.pathname === "/login") return NextResponse.redirect(new URL("/dashboard", request.url));
+  if (user && isLoginPath) return NextResponse.redirect(new URL("/dashboard", request.url));
   return response;
 }
 

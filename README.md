@@ -98,6 +98,8 @@ values ('UUID_AUTH_USER', 'Admin', 'admin', null);
 4. Configura `NEXT_PUBLIC_APP_URL` con la URL pública de Vercel.
 5. Deploy.
 
+Si Vercel muestra `500: INTERNAL_SERVER_ERROR` con `MIDDLEWARE_INVOCATION_FAILED`, casi siempre faltan `NEXT_PUBLIC_SUPABASE_URL` o `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` en el proyecto de Vercel, o se agregaron después del último deploy y hace falta redeploy.
+
 ### Nota importante de seguridad
 
 - No publiques `SUPABASE_SECRET_KEY` en Vercel salvo que agregues rutas server-side que realmente la necesiten.
