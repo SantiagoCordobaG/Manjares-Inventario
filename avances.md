@@ -37,6 +37,7 @@
 - Se agregó contexto visible de usuario, rol y sede en el layout para mejorar la demo.
 - Se mejoró el feedback de formularios y acciones para mostrar errores reales de Supabase/RLS.
 - Se conectó la gráfica de ventas del dashboard a datos reales de movimientos, en lugar de datos estáticos.
+- Se rediseñó la pantalla de login con accesos de demo visibles, mejor jerarquía visual y redirección más robusta tras autenticarse.
 
 ### Archivos creados/modificados
 - `package.json`
