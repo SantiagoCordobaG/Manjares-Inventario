@@ -66,6 +66,7 @@ npm run bootstrap:user -- punto.lopez@pasteleria.com LopezDemo123 "Lopez Demo" -
 3. Ejecuta `supabase/schema.sql`.
    Si ya tenías sedes antiguas, ejecuta también `supabase/normalize-sedes.sql`.
    Si el proyecto ya tenía el esquema creado pero el API responde errores de permisos, ejecuta además `supabase/repair-api-grants.sql`.
+   Si los traslados fallan con un error de RLS sobre `unidades_inventario`, ejecuta también `supabase/fix-traslado-rls.sql`.
 4. Crea usuarios desde Supabase Auth.
 5. Inserta el perfil correspondiente en `public.usuarios` usando el mismo `id` del usuario Auth.
 
