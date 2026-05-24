@@ -41,6 +41,9 @@
 - Se corrigió la visualización de QR en detalle de inventario usando una imagen PNG directa para evitar fallos del optimizador de imágenes con SVG dinámico.
 - Se corrigió el flujo de traslados para usar una RPC segura en Supabase y evitar errores RLS al mover una unidad entre sedes.
 - Se agregó cierre de sesión visible en desktop y móvil usando `supabase.auth.signOut()` con redirección al login.
+- Se amplió el dashboard del administrador con visibilidad global: ventas sumadas por sede, ingresos estimados y movimientos recientes entre puntos.
+- Se rehizo la pantalla de login con un layout más robusto y utilidades estándar para evitar que en producción se perciba como una vista sin estilos.
+- Se corrigió la recursión de helpers RLS (`current_user_role` y `current_user_punto`) con funciones `security definer` para evitar `stack depth limit exceeded` al crear unidades.
 
 ### Archivos creados/modificados
 - `package.json`

@@ -17,6 +17,7 @@ Sistema web MVP para gestionar inventario individual de tortas/pastelería con Q
 - Login con Supabase Auth.
 - Roles previstos: `admin`, `encargado_punto`, `produccion`.
 - Sedes oficiales demo: `Guaduales (Principal)`, `Lopez`, `Villa Colombia`, `Limonar`.
+- Dashboard admin con vista global de ventas por sede y movimientos recientes.
 - CRUD base de productos.
 - Creación de unidades físicas individuales.
 - Código QR único por unidad.
@@ -67,6 +68,7 @@ npm run bootstrap:user -- punto.lopez@pasteleria.com LopezDemo123 "Lopez Demo" -
    Si ya tenías sedes antiguas, ejecuta también `supabase/normalize-sedes.sql`.
    Si el proyecto ya tenía el esquema creado pero el API responde errores de permisos, ejecuta además `supabase/repair-api-grants.sql`.
    Si los traslados fallan con un error de RLS sobre `unidades_inventario`, ejecuta también `supabase/fix-traslado-rls.sql`.
+   Si al crear unidades aparece `stack depth limit exceeded`, ejecuta `supabase/fix-rls-helper-recursion.sql`.
 4. Crea usuarios desde Supabase Auth.
 5. Inserta el perfil correspondiente en `public.usuarios` usando el mismo `id` del usuario Auth.
 
